@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+  labels:
+    app: user-service
+  namespace: oracle-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      imagePullSecrets:
+      - name: oracle-demo-secret
+      containers:
+      - name: springboot-helloworld
+        image: phx.ocir.io/yomabankdapoc/oracledemo/user-service:latest
+        ports:
+        - name: server
+          containerPort: 8080
