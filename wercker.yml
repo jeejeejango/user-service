@@ -23,7 +23,7 @@ push-release:
       password: $DOCKER_PASSWORD
       registry: $DOCKER_REGISTRY
       repository: $REPOSITORY/user-service
-      cmd: java -Djava.security.egd=file:/dev/./urandom -jar $WERCKER_SOURCE_DIR/app.jar
+      cmd: java -Djava.security.egd=file:/dev/./urandom -jar /pipeline/source/app.jar
 
 
 inject-secret:
