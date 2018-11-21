@@ -14,5 +14,19 @@ build:
   steps:
   # https://github.com/wercker/step-maven
   - wercker/maven:
-    goals: clean package
-    cache_repo: true
+      goals: clean package
+      cache_repo: true
+  - script:
+      code: cp $WERCKER_SOURCE_DIR/target/user-service.jar /app.jar
+
+
+push-to-registry:
+  # use a lightweight version of jre8-alpine container
+  box: openjdk:11.0.1-jre-slim
+  steps:
+  - internal/docker-push:
+      username: $DOCKERHUB_USERNAME
+      password: $DOCKERHUB_PASSWORD
+      registry: $REGISTRY
+      repository: $USERNAME/$REPOSITORY
+      cmd: "java -Djava.security.egd=file:/dev/./urandom -jar /app.jar"
