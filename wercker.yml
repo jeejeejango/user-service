@@ -54,8 +54,7 @@ deploy-to-cluster:
   steps:
 
   - bash-template:
-      input: $WERCKER_SOURCE_DIR/deploy/kubernetes/*.template*
-      output: $WERCKER_SOURCE_DIR/deploy/kubernetes/
+      input: ./deploy/kubernetes/*.template*
 
   - script:
       name: "View Kubernetes config"
