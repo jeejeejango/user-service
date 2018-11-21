@@ -16,4 +16,4 @@ build:
   - java/maven:
     goals: package
     cache_repo: true
-    version: 3.5.4
+    version: 3.5.2
