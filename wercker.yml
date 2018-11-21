@@ -20,13 +20,52 @@ build:
       code: cp $WERCKER_SOURCE_DIR/target/user-service.jar /app.jar
 
 
-push-to-registry:
-  # use a lightweight version of jre8-alpine container
+push-release:
   box: openjdk:11.0.1-jre-slim
   steps:
   - internal/docker-push:
-      username: $DOCKERHUB_USERNAME
-      password: $DOCKERHUB_PASSWORD
-      registry: $REGISTRY
+      username: $DOCKER_USERNAME
+      password: $DOCKER_PASSWORD
+      registry: $DOCKER_REGISTRY
       repository: $USERNAME/$REPOSITORY
       cmd: "java -Djava.security.egd=file:/dev/./urandom -jar /app.jar"
+
+inject-secret:
+  box:
+    id: alpine
+    cmd: /bin/sh
+  steps:
+
+  - kubectl:
+      name: delete secret
+      server: $KUBERNETES_MASTER
+      token: $KUBERNETES_TOKEN
+      insecure-skip-tls-verify: true
+      command: delete secret oke-demo-secret; echo delete registry secret
+
+  - kubectl:
+      name: create secret
+        server: $KUBERNETES_MASTER
+      token: $KUBERNETES_TOKEN
+      insecure-skip-tls-verify: true
+      command: create secret docker-registry oke-demo-secret --docker-server=$DOCKER_REGISTRY --docker-username=$DOCKER_USERNAME --docker-password=$DOCKER_PASSWORD --docker-email=$DOCKER_EMAIL; echo create registry secret
+
+deploy-to-cluster:
+  box:
+    id: alpine
+    cmd: /bin/sh
+  steps:
+
+  - bash-template
+
+  - script:
+      name: "View Kubernetes config"
+      code: cat $WERCKER_SOURCE_DIR/deploy/kubernetes/app-user-service-deploy.yaml
+            cat $WERCKER_SOURCE_DIR/deploy/kubernetes/app-user-service-svc.yaml
+
+  - kubectl:
+      name: deploy to kubernetes
+      server: $KUBERNETES_MASTER
+      token: $KUBERNETES_TOKEN
+      insecure-skip-tls-verify: true
+      command: apply -f $WERCKER_SOURCE_DIR/deploy/kubernetes/

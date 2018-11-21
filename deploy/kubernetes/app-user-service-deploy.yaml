@@ -16,7 +16,7 @@ spec:
         app: user-service
     spec:
       imagePullSecrets:
-      - name: oracle-demo-secret
+      - name: oke-demo-secret
       containers:
       - name: springboot-helloworld
         image: phx.ocir.io/yomabankdapoc/oracledemo/user-service:latest
