@@ -4,7 +4,7 @@ metadata:
   name: user-service
   labels:
     app: user-service
-  namespace: oracle-demo
+  namespace: ${OKE_NAMESPACE}
 spec:
   replicas: 1
   selector:
@@ -15,11 +15,11 @@ spec:
       labels:
         app: user-service
     spec:
-      imagePullSecrets:
-      - name: oke-demo-secret
       containers:
-      - name: springboot-helloworld
-        image: phx.ocir.io/yomabankdapoc/oracledemo/user-service:latest
+      - name: user-service
+        image: ${DOCKER_REGISTRY}/${REPOSITORY}/user-service:latest
         ports:
         - name: server
           containerPort: 8080
+      imagePullSecrets:
+      - name: ${OKE_SECRET}

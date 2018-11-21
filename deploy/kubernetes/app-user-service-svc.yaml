@@ -4,7 +4,7 @@ metadata:
   name: user-service
   labels:
     app: user-service
-  namespace: oracle-demo
+  namespace: ${OKE_NAMESPACE}
 spec:
   ports:
   - name: http

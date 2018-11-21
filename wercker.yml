@@ -6,18 +6,24 @@ build:
       goals: clean package
       cache_repo: true
   - script:
-      code: cp $WERCKER_SOURCE_DIR/target/user-service.jar /app.jar
+      code: cp $WERCKER_SOURCE_DIR/target/user-service.jar $WERCKER_SOURCE_DIR/app.jar
 
 
 push-release:
   box: openjdk:11.0.1-jre-slim
   steps:
+  - script:
+      name: clear cache content
+      code: |
+        rm -rf $WERCKER_CACHE_DIR
+        rm -rf $WERCKER_OUTPUT_DIR
+        rm -rf $WERCKER_SOURCE_DIR/target
   - internal/docker-push:
       username: $DOCKER_USERNAME
       password: $DOCKER_PASSWORD
       registry: $DOCKER_REGISTRY
-      repository: $USERNAME/$REPOSITORY
-      cmd: "java -Djava.security.egd=file:/dev/./urandom -jar /app.jar"
+      repository: $REPOSITORY/user-service
+      cmd: java -Djava.security.egd=file:/dev/./urandom -jar $WERCKER_SOURCE_DIR/app.jar
 
 
 inject-secret:
@@ -31,14 +37,14 @@ inject-secret:
       server: $KUBERNETES_MASTER
       token: $KUBERNETES_TOKEN
       insecure-skip-tls-verify: true
-      command: delete secret oke-demo-secret; echo delete registry secret
+      command: delete secret oke-demo-secret -n $OKE_NAMESPACE; echo delete registry secret
 
   - kubectl:
       name: create secret
       server: $KUBERNETES_MASTER
       token: $KUBERNETES_TOKEN
       insecure-skip-tls-verify: true
-      command: create secret docker-registry oke-demo-secret --docker-server=$DOCKER_REGISTRY --docker-username="$DOCKER_USERNAME" --docker-password="$DOCKER_PASSWORD" --docker-email=$DOCKER_EMAIL; echo create registry secret
+      command: create secret docker-registry $OKE_SECRET --docker-server=$DOCKER_REGISTRY --docker-username="$DOCKER_USERNAME" --docker-password="$DOCKER_PASSWORD" --docker-email=$DOCKER_EMAIL -n $OKE_NAMESPACE; echo create registry secret
 
 
 deploy-to-cluster:
