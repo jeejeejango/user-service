@@ -2,7 +2,6 @@ package org.jeejeejango.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -37,10 +36,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
             .and()
             .authorizeRequests()
+/*
             .antMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN")
             .antMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN")
             .antMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN")
-            .antMatchers("/api/**").authenticated()
+*/
+            .antMatchers("/api/**").hasRole("USER")
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/**").hasRole("ADMIN")
             .antMatchers("/swagger-ui.html").permitAll()
