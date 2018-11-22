@@ -93,6 +93,12 @@
             <artifactId>springfox-swagger2</artifactId>
             <version>${springfox-swagger2.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <version>${micrometer.version}</version>
+        </dependency>
+
 
         <!-- swagger 2 -->
         <dependency>
