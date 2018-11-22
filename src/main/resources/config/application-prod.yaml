@@ -11,7 +11,7 @@ spring:
     restart:
       enabled: false
 
-  cache:
+  cache:@CrossOrigin
     jcache:
       config: classpath:/config/jcache/ehcache-prod.xml
 
