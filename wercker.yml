@@ -53,7 +53,7 @@ scan-release:
     - script:
       name: Pull image
       code: |
-        docker login $DOCKER_REGISTRY -u '$DOCKER_USERNAME' -p '$DOCKER_PASSWORD'
+        docker login $DOCKER_REGISTRY -u $DOCKER_USERNAME -p '$DOCKER_PASSWORD'
         docker pull $DOCKER_REGISTRY/$REPOSITORY/user-service
     - script:
       name: Scan an image
