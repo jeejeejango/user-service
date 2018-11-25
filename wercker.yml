@@ -11,7 +11,7 @@ build:
 
 
 push-release:
-  box: openjdk:11.0.1-jre-slim
+  box: openjdk:11-jre-slim
   steps:
   - script:
       name: clear cache content
@@ -47,7 +47,7 @@ scan-release:
       name: Start up clair server and database
       code: |
         NETWORK=`docker network ls | grep "w-" | awk ' { print $1; } '`
-        docker run --network $NETWORK --name postgres --rm -d arminc/clair-db:2018-11-25
+        docker run --network $NETWORK --name postgres --rm -d arminc/clair-db:2018-10-01
         sleep 10 # to make sure clair service has started
         docker run --network $NETWORK --name clair --rm -d arminc/clair-local-scan:v2.0.6
     - script:
