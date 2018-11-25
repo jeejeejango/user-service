@@ -62,7 +62,7 @@ scan-release:
         docker network ls | grep "w-" | awk ' { print $1; } ' | xargs docker network inspect
         docker ps -a
         ./clair-scanner --ip=`hostname -i` --report="report.json" --clair="http://clair:6060" $DOCKER_REGISTRY/$REPOSITORY/user-service
-        OK=`grep -i 'high cve-' report.json | wc -l`
+        OK=`grep -i "high cve-" report.json | wc -l`
         echo $OK
         # cat report.json
         if [ "$OK" == "0" ]; then
