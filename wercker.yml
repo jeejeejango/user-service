@@ -63,13 +63,11 @@ scan-release:
         docker ps -a
         ./clair-scanner --ip=`hostname -i` \
           --report="report.json" \
-          --log="clair.log" \
+          --threshold="High" \
           --clair="http://clair:6060" \
           $DOCKER_REGISTRY/$REPOSITORY/user-service
         OK=`grep -i "high cve-" report.json | wc -l`
         echo "status = " $OK
-        echo "Clair Log"
-        cat clair.log
         echo "Clair Report"
         cat report.json
         if [ "$OK" == "0" ]; then
