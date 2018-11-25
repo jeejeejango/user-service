@@ -59,8 +59,8 @@ deploy-to-cluster:
   - script:
       name: "View Kubernetes config"
       code: |
+        cat $WERCKER_SOURCE_DIR/deploy/kubernetes/db-mysql-deploy.yaml
         cat $WERCKER_SOURCE_DIR/deploy/kubernetes/app-user-service-deploy.yaml
-        cat $WERCKER_SOURCE_DIR/deploy/kubernetes/app-user-service-svc.yaml
 
   - kubectl:
       name: deploy to kubernetes
