@@ -67,4 +67,4 @@ deploy-to-cluster:
       server: $KUBERNETES_MASTER
       token: $KUBERNETES_TOKEN
       insecure-skip-tls-verify: true
-      command: apply -f $WERCKER_SOURCE_DIR/deploy/kubernetes/
+      command: apply -f $WERCKER_SOURCE_DIR/deploy/kubernetes/ -n ${OKE_NAMESPACE}

@@ -1,10 +1,24 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+  labels:
+    app: user-service
+spec:
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+  selector:
+    app: user-service
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: user-service
   labels:
     app: user-service
-  namespace: ${OKE_NAMESPACE}
 spec:
   replicas: 1
   selector:
@@ -21,5 +35,18 @@ spec:
         ports:
         - name: server
           containerPort: 8080
+        env:
+        - name: spring_datasource_url
+          value: jdbc:mysql://mysql/${MYSQL_DATABASE}?characterEncoding=UTF-8
+        - name: spring_datasource_username
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: MYSQL_USER
+        - name: spring_datasource_password
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: MYSQL_PASSWORD
       imagePullSecrets:
       - name: ${OKE_SECRET}

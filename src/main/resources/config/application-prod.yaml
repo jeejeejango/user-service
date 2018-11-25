@@ -11,7 +11,7 @@ spring:
     restart:
       enabled: false
 
-  cache:@CrossOrigin
+  cache:
     jcache:
       config: classpath:/config/jcache/ehcache-prod.xml
 
@@ -19,7 +19,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: password1
-    url: jdbc:mysql://localhost:3306/ms_user?createDatabaseIfNotExist=true&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/ms_user?characterEncoding=UTF-8
 
   jpa:
     database: mysql
