@@ -32,6 +32,7 @@ spec:
       containers:
       - name: user-service
         image: ${DOCKER_REGISTRY}/${REPOSITORY}/user-service:latest
+        imagePullPolicy: Always
         ports:
         - name: server
           containerPort: 8080
