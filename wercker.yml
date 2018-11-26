@@ -1,17 +1,27 @@
 build:
-  box: maven:3.6.0-jdk-8
+  box: maven:3.6.0-jdk-8-alpine
   steps:
+    - script:
+        name: Install procps
+        code: apk --no-cache add procps
     - wercker/maven:
-        goals: clean package -DskipTests=true
+        goals: clean package
         cache_repo: true
         profiles: prod
-    - script:
-        code: cp $WERCKER_SOURCE_DIR/target/user-service.jar $WERCKER_SOURCE_DIR/app.jar
 
 
 push-release:
   box: openjdk:8-jre-alpine
   steps:
+    - script:
+        name: copy jar file to source root
+        code: |
+          mkdir $WERCKER_SOURCE_DIR/dist
+          cp $WERCKER_SOURCE_DIR/target/user-service.jar $WERCKER_SOURCE_DIR/dist/app.jar
+    - script:
+        name: Setup monitoring agent
+        code: |
+          unzip $WERCKER_SOURCE_DIR/deploy/monitoring/apmagent.zip -d ./dist
     - script:
         name: clear cache content
         code: |
@@ -23,7 +33,7 @@ push-release:
         password: $DOCKER_PASSWORD
         registry: $DOCKER_REGISTRY
         repository: $REPOSITORY/user-service
-        cmd: java -Djava.security.egd=file:/dev/./urandom -jar /pipeline/source/app.jar
+        cmd: java -Djava.security.egd=file:/dev/./urandom -javaagent:/pipeline/source/dist/apmagent/lib/system/ApmAgentInstrumentation.jar -jar /pipeline/source/dist/app.jar
 
 
 scan-release:
