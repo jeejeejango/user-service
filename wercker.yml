@@ -5,7 +5,6 @@ build:
         goals: clean package
         cache_repo: true
         profiles: prod
-        version: 3.6.0
     - script:
         code: cp $WERCKER_SOURCE_DIR/target/user-service.jar $WERCKER_SOURCE_DIR/app.jar
 
