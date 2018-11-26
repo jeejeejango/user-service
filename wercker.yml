@@ -1,10 +1,9 @@
 build:
-  box: openjdk:8-jdk
+  box: maven:3.6.0-jdk-8
   steps:
     - wercker/maven:
         goals: clean package
         cache_repo: true
-        version: 3.6.0
         profiles: prod
     - script:
         code: cp $WERCKER_SOURCE_DIR/target/user-service.jar $WERCKER_SOURCE_DIR/app.jar
