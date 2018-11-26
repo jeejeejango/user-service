@@ -2,29 +2,29 @@ box: maven:3.6.0-jdk-8
 
 build:
   steps:
-  - wercker/maven:
-      goals: clean package
-      cache_repo: true
-      profiles: prod
-  - script:
-      code: cp $WERCKER_SOURCE_DIR/target/user-service.jar $WERCKER_SOURCE_DIR/app.jar
+    - wercker/maven:
+        goals: clean package
+        cache_repo: true
+        profiles: prod
+    - script:
+        code: cp $WERCKER_SOURCE_DIR/target/user-service.jar $WERCKER_SOURCE_DIR/app.jar
 
 
 push-release:
   box: openjdk:8-jre-alpine
   steps:
-  - script:
-      name: clear cache content
-      code: |
-        rm -rf $WERCKER_CACHE_DIR
-        rm -rf $WERCKER_OUTPUT_DIR
-        rm -rf $WERCKER_SOURCE_DIR/target
-  - internal/docker-push:
-      username: $DOCKER_USERNAME
-      password: $DOCKER_PASSWORD
-      registry: $DOCKER_REGISTRY
-      repository: $REPOSITORY/user-service
-      cmd: java -Djava.security.egd=file:/dev/./urandom -jar /pipeline/source/app.jar
+    - script:
+        name: clear cache content
+        code: |
+          rm -rf $WERCKER_CACHE_DIR
+          rm -rf $WERCKER_OUTPUT_DIR
+          rm -rf $WERCKER_SOURCE_DIR/target
+    - internal/docker-push:
+        username: $DOCKER_USERNAME
+        password: $DOCKER_PASSWORD
+        registry: $DOCKER_REGISTRY
+        repository: $REPOSITORY/user-service
+        cmd: java -Djava.security.egd=file:/dev/./urandom -jar /pipeline/source/app.jar
 
 
 scan-release:
@@ -85,20 +85,19 @@ inject-secret:
     id: alpine
     cmd: /bin/sh
   steps:
-
-  - kubectl:
-      name: delete secret
-      server: $KUBERNETES_MASTER
-      token: $KUBERNETES_TOKEN
-      insecure-skip-tls-verify: true
-      command: delete secret oke-demo-secret -n $OKE_NAMESPACE; echo delete registry secret
-
-  - kubectl:
-      name: create secret
-      server: $KUBERNETES_MASTER
-      token: $KUBERNETES_TOKEN
-      insecure-skip-tls-verify: true
-      command: create secret docker-registry $OKE_SECRET --docker-server=$DOCKER_REGISTRY --docker-username="$DOCKER_USERNAME" --docker-password="$DOCKER_PASSWORD" --docker-email=$DOCKER_EMAIL -n $OKE_NAMESPACE; echo create registry secret
+    - kubectl:
+        name: delete secret
+        server: $KUBERNETES_MASTER
+        token: $KUBERNETES_TOKEN
+        insecure-skip-tls-verify: true
+        command: delete secret oke-demo-secret -n $OKE_NAMESPACE; echo delete registry secret
+        
+    - kubectl:
+        name: create secret
+        server: $KUBERNETES_MASTER
+        token: $KUBERNETES_TOKEN
+        insecure-skip-tls-verify: true
+        command: create secret docker-registry $OKE_SECRET --docker-server=$DOCKER_REGISTRY --docker-username="$DOCKER_USERNAME" --docker-password="$DOCKER_PASSWORD" --docker-email=$DOCKER_EMAIL -n $OKE_NAMESPACE; echo create registry secret
 
 
 deploy-to-cluster:
@@ -107,18 +106,18 @@ deploy-to-cluster:
     cmd: /bin/sh
   steps:
 
-  - bash-template:
-      input: ./deploy/kubernetes/*.template*
+    - bash-template:
+        input: ./deploy/kubernetes/*.template*
 
-  - script:
-      name: "View Kubernetes config"
-      code: |
-        cat $WERCKER_SOURCE_DIR/deploy/kubernetes/db-mysql-deploy.yaml
-        cat $WERCKER_SOURCE_DIR/deploy/kubernetes/app-user-service-deploy.yaml
+    - script:
+        name: "View Kubernetes config"
+        code: |
+          cat $WERCKER_SOURCE_DIR/deploy/kubernetes/db-mysql-deploy.yaml
+          cat $WERCKER_SOURCE_DIR/deploy/kubernetes/app-user-service-deploy.yaml
 
-  - kubectl:
-      name: deploy to kubernetes
-      server: $KUBERNETES_MASTER
-      token: $KUBERNETES_TOKEN
-      insecure-skip-tls-verify: true
-      command: apply -f $WERCKER_SOURCE_DIR/deploy/kubernetes/ -n ${OKE_NAMESPACE}
+    - kubectl:
+        name: deploy to kubernetes
+        server: $KUBERNETES_MASTER
+        token: $KUBERNETES_TOKEN
+        insecure-skip-tls-verify: true
+        command: apply -f $WERCKER_SOURCE_DIR/deploy/kubernetes/ -n ${OKE_NAMESPACE}
