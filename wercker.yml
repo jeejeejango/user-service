@@ -1,4 +1,4 @@
-box: maven:3.6.0-jdk-11
+box: maven:3.6.0-jdk-8
 
 build:
   steps:
@@ -11,7 +11,7 @@ build:
 
 
 push-release:
-  box: openjdk:11-jre-slim
+  box: openjdk:8-jre-alpine
   steps:
     - script:
         name: clear cache content
