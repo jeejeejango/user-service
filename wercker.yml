@@ -1,4 +1,4 @@
-box: maven:3.6.0-jdk-8
+box: maven:3.6.0-jdk-11
 
 build:
   steps:
@@ -11,7 +11,7 @@ build:
 
 
 push-release:
-  box: openjdk:8-jre-alpine
+  box: openjdk:11-jre-slim
   steps:
     - script:
         name: clear cache content
@@ -85,13 +85,14 @@ inject-secret:
     id: alpine
     cmd: /bin/sh
   steps:
+
     - kubectl:
         name: delete secret
         server: $KUBERNETES_MASTER
         token: $KUBERNETES_TOKEN
         insecure-skip-tls-verify: true
         command: delete secret oke-demo-secret -n $OKE_NAMESPACE; echo delete registry secret
-        
+
     - kubectl:
         name: create secret
         server: $KUBERNETES_MASTER
