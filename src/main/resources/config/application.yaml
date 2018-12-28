@@ -9,7 +9,6 @@ spring:
     type: jcache
     jcache:
       provider: org.ehcache.jsr107.EhcacheCachingProvider
-      config: classpath:/config/jcache/ehcache-dev.xml
 
   hateoas:
     use-hal-as-default-json-media-type: false
