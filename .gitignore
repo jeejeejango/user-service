@@ -27,3 +27,4 @@
 ### custom ###
 /cache/
 /todo.txt
+/deploy/monitoring/apmagent/
