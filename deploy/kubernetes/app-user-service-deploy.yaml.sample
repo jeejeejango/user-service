@@ -38,14 +38,14 @@ spec:
           containerPort: 8080
         env:
         - name: spring_datasource_url
-          value: jdbc:mysql://mysql/ms_user?characterEncoding=UTF-8
+          value: jdbc:mysql://user-mysql/ms_user?characterEncoding=UTF-8
         - name: spring_datasource_username
           valueFrom:
             secretKeyRef:
-              name: mysql-secret
+              name: user-mysql-secret
               key: MYSQL_USER
         - name: spring_datasource_password
           valueFrom:
             secretKeyRef:
-              name: mysql-secret
+              name: user-mysql-secret
               key: MYSQL_PASSWORD

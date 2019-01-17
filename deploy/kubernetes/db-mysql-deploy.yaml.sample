@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: mysql
+  name: user-mysql
   labels:
-    app: mysql
+    app: user-mysql
 spec:
   #type: NodePort
   ports:
@@ -11,13 +11,13 @@ spec:
     #targetPort: 3306
     #nodePort: 31000
   selector:
-    app: mysql
+    app: user-mysql
   clusterIP: None
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: mysql-secret
+  name: user-mysql-secret
 type: Opaque
 data:
   MYSQL_ROOT_PASSWORD: cGFzc3dvcmQx
@@ -28,7 +28,7 @@ data:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mysql-pv-claim
+  name: user-mysql-pv-claim
 spec:
   accessModes:
   - ReadWriteOnce
@@ -39,22 +39,22 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql
+  name: user-mysql
   labels:
-    app: mysql
+    app: user-mysql
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mysql
+      app: user-mysql
   template:
     metadata:
       labels:
-        app: mysql
+        app: user-mysql
     spec:
       containers:
       - image: mysql:8.0.13
-        name: mysql
+        name: user-mysql
         args:
         - --character-set-server=utf8mb4
         - --collation-server=utf8mb4_unicode_ci
@@ -63,30 +63,30 @@ spec:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mysql-secret
+              name: user-mysql-secret
               key: MYSQL_ROOT_PASSWORD
         - name: MYSQL_USER
           valueFrom:
             secretKeyRef:
-              name: mysql-secret
+              name: user-mysql-secret
               key: MYSQL_USER
         - name: MYSQL_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mysql-secret
+              name: user-mysql-secret
               key: MYSQL_PASSWORD
         - name: MYSQL_DATABASE
           valueFrom:
             secretKeyRef:
-              name: mysql-secret
+              name: user-mysql-secret
               key: MYSQL_DATABASE
         ports:
         - containerPort: 3306
-          name: mysql
+          name: user-mysql
         volumeMounts:
-        - name: mysql-persistent-storage
+        - name: user-mysql-persistent-storage
           mountPath: /var/lib/mysql
       volumes:
-      - name: mysql-persistent-storage
+      - name: user-mysql-persistent-storage
         persistentVolumeClaim:
-          claimName: mysql-pv-claim
+          claimName: user-mysql-pv-claim

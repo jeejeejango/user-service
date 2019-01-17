@@ -24,7 +24,6 @@
         <java.version>1.8</java.version>
 
         <spring-boot.version>${project.parent.version}</spring-boot.version>
-        <liquibase.version>3.6.2</liquibase.version>
         <liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
         <jaxb-runtime.version>2.4.0-b180830.0438</jaxb-runtime.version>
@@ -74,7 +73,6 @@
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
-            <version>${liquibase.version}</version>
         </dependency>
         <dependency>
             <groupId>org.ehcache</groupId>
