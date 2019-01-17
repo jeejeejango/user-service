@@ -18,10 +18,10 @@ push-release:
         code: |
           mkdir $WERCKER_SOURCE_DIR/dist
           cp $WERCKER_SOURCE_DIR/target/user-service.jar $WERCKER_SOURCE_DIR/dist/app.jar
-    - script:
-        name: Setup monitoring agent
-        code: |
-          unzip $WERCKER_SOURCE_DIR/deploy/monitoring/apmagent.zip -d ./dist
+    #- script:
+    #    name: Setup monitoring agent
+    #    code: |
+    #      unzip $WERCKER_SOURCE_DIR/deploy/monitoring/apmagent.zip -d ./dist
     - script:
         name: clear cache content
         code: |
@@ -33,7 +33,8 @@ push-release:
         password: $DOCKER_PASSWORD
         registry: $DOCKER_REGISTRY
         repository: $REPOSITORY/user-service
-        cmd: java -Djava.security.egd=file:/dev/./urandom -javaagent:/pipeline/source/dist/apmagent/lib/system/ApmAgentInstrumentation.jar -jar /pipeline/source/dist/app.jar
+        #cmd: java -Djava.security.egd=file:/dev/./urandom -javaagent:/pipeline/source/dist/apmagent/lib/system/ApmAgentInstrumentation.jar -jar /pipeline/source/dist/app.jar
+        cmd: java -Djava.security.egd=file:/dev/./urandom -jar /pipeline/source/dist/app.jar
 
 
 scan-release:

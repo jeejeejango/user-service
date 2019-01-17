@@ -8,8 +8,10 @@ spec:
   # type: LoadBalancer
   ports:
   - name: http
-    #port: 80
+    # LoadBalancer type
+    # port: 80
     # targetPort: 8080
+    port: 8080
   selector:
     app: user-service
 ---
