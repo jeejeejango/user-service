@@ -40,6 +40,9 @@ public class TeamClientImpl implements TeamClient {
     public void init() {
         restTemplate.getInterceptors().add(new BasicAuthenticationInterceptor("admin", "password1"));
         teamURL = protocol + "://" + host + ":" + port + endpoint;
+        if (log.isInfoEnabled()) {
+            log.info("team url {}", teamURL);
+        }
     }
 
 
