@@ -54,4 +54,4 @@ spec:
         - name: client_team_host
           value: team-service
         - name: client_team_port
-          value: $(TEAM_SERVICE_SERVICE_PORT)
+          value: 8080
