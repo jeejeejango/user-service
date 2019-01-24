@@ -54,6 +54,6 @@ spec:
         - name: client_team_host
           value: team-service
         - name: client_team_port
-          value: 8080
+          value: "\$(TEAM_SERVICE_SERVICE_PORT)"
       imagePullSecrets:
       - name: ${OKE_SECRET}
