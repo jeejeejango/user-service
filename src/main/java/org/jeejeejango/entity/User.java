@@ -55,4 +55,6 @@ public class User {
     @Size(max = 255)
     private String description;
 
+    private Long teamId;
+
 }

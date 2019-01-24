@@ -1,5 +1,6 @@
 package org.jeejeejango.web;
 
+import org.jeejeejango.client.TeamClient;
 import org.jeejeejango.entity.User;
 import org.jeejeejango.repository.UserRepository;
 import org.slf4j.Logger;
@@ -33,9 +34,13 @@ public class UserRestController {
 
     private UserRepository userRepository;
 
+    private TeamClient teamClient;
 
-    public UserRestController(UserRepository userRepository) {
+
+    public UserRestController(UserRepository userRepository,
+                              TeamClient teamClient) {
         this.userRepository = userRepository;
+        this.teamClient = teamClient;
     }
 
 
@@ -83,6 +88,7 @@ public class UserRestController {
     @PostMapping
     public ResponseEntity<?> addUser(@RequestBody @Valid User user) {
         user.setId(null);
+        teamClient.validateTeam(user.getTeamId());
         user = userRepository.save(user);
         if (logger.isInfoEnabled()) {
             logger.info("add user by id {}", user.getId());
@@ -102,6 +108,7 @@ public class UserRestController {
         if (logger.isInfoEnabled()) {
             logger.info("update user by id {}", id);
         }
+        teamClient.validateTeam(user.getTeamId());
         userRepository.save(user);
         return new ResponseEntity<>(HttpStatus.OK);
     }

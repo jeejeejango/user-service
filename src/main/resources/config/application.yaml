@@ -58,3 +58,10 @@ management:
     metrics:
       enabled: true
 
+
+client:
+  team:
+    protocol: http
+    host: localhost
+    port: 8090
+    endpoint: /api/v1/teams

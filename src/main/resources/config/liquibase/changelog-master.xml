@@ -7,5 +7,6 @@
                             http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <include file="config/liquibase/changelog/000001-user.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/000002-addteam.xml" relativeToChangelogFile="false"/>
 
 </databaseChangeLog>
