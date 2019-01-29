@@ -23,6 +23,7 @@ import javax.validation.Valid;
 import java.util.Collection;
 import java.util.Optional;
 
+import static liquibase.util.StringUtils.trimToNull;
 import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.contains;
 
 @RestController
@@ -56,7 +57,7 @@ public class UserRestController {
                                                            @RequestParam(required = false) String lastName,
                                                            @RequestParam(required = false) String email,
                                                            Pageable pageable) {
-        User user = new User(firstName, lastName, email);
+        User user = new User(trimToNull(firstName), trimToNull(lastName), trimToNull(email));
 
         if (log.isInfoEnabled()) {
             log.info("search user {}, pageable {}", user, pageable);
