@@ -1,10 +1,9 @@
 package org.jeejeejango.web;
 
+import lombok.extern.slf4j.Slf4j;
 import org.jeejeejango.client.TeamClient;
 import org.jeejeejango.entity.User;
 import org.jeejeejango.repository.UserRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Pageable;
@@ -28,9 +27,8 @@ import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatc
 
 @RestController
 @RequestMapping("/api/v1/users")
+@Slf4j
 public class UserRestController {
-
-    private static final Logger logger = LoggerFactory.getLogger(UserRestController.class);
 
     private UserRepository userRepository;
 
@@ -46,8 +44,8 @@ public class UserRestController {
 
     @GetMapping
     public ResponseEntity<Collection<User>> getAllUsers(Pageable pageable) {
-        if (logger.isInfoEnabled()) {
-            logger.info("find all user, pageable {}", pageable);
+        if (log.isInfoEnabled()) {
+            log.info("find all user, pageable {}", pageable);
         }
         return new ResponseEntity<>(userRepository.findAll(pageable).getContent(), HttpStatus.OK);
     }
@@ -60,8 +58,8 @@ public class UserRestController {
                                                            Pageable pageable) {
         User user = new User(firstName, lastName, email);
 
-        if (logger.isInfoEnabled()) {
-            logger.info("search user {}, pageable {}", user, pageable);
+        if (log.isInfoEnabled()) {
+            log.info("search user {}, pageable {}", user, pageable);
         }
 
         ExampleMatcher matcher = ExampleMatcher.matching()
@@ -78,8 +76,8 @@ public class UserRestController {
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         Optional<User> user = userRepository.findById(id);
-        if (logger.isInfoEnabled()) {
-            logger.info("user id {} found {}", id, user.isPresent());
+        if (log.isInfoEnabled()) {
+            log.info("user id {} found {}", id, user.isPresent());
         }
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -90,8 +88,8 @@ public class UserRestController {
         user.setId(null);
         teamClient.validateTeam(user.getTeamId());
         user = userRepository.save(user);
-        if (logger.isInfoEnabled()) {
-            logger.info("add user by id {}", user.getId());
+        if (log.isInfoEnabled()) {
+            log.info("add user by id {}", user.getId());
         }
         return ResponseEntity.ok(user);
     }
@@ -100,13 +98,13 @@ public class UserRestController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(@PathVariable("id") Long id, @RequestBody @Valid User user) {
         if (!id.equals(user.getId())) {
-            if (logger.isWarnEnabled()) {
-                logger.warn("update user id does not match", id);
+            if (log.isWarnEnabled()) {
+                log.warn("update user id does not match", id);
             }
             return ResponseEntity.badRequest().build();
         }
-        if (logger.isInfoEnabled()) {
-            logger.info("update user by id {}", id);
+        if (log.isInfoEnabled()) {
+            log.info("update user by id {}", id);
         }
         teamClient.validateTeam(user.getTeamId());
         userRepository.save(user);
@@ -116,8 +114,8 @@ public class UserRestController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
-        if (logger.isInfoEnabled()) {
-            logger.info("delete user by id {}", id);
+        if (log.isInfoEnabled()) {
+            log.info("delete user by id {}", id);
         }
         userRepository.deleteById(id);
         return ResponseEntity.ok().build();
