@@ -61,4 +61,8 @@ client:
     protocol: http
     host: localhost
     port: 8090
-    endpoint: /api/v1/teams
+    endpoint: /team/api/v1/teams
+
+server:
+  servlet:
+    context-path: /user
